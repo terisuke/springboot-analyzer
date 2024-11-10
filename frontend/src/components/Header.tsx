@@ -18,7 +18,7 @@ const Header: React.FC = () => {
           <div className="flex items-center space-x-4">
             {/* GitHubリンクなどを追加予定 */}
             <a
-              href="https://github.com/yourusername/springboot-analyzer"
+              href="https://github.com/terisuke/springboot-analyzer"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-500 hover:text-gray-700"
