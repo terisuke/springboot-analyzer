@@ -1,46 +1,48 @@
-# Getting Started with Create React App
+# SpringBootプロジェクト分析ツールの開発について
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 概要
+大規模なJavaアプリケーションのコードを自動で分析し、その機能や構造を可視化するWebアプリケーションを開発しています。
 
-## Available Scripts
+## 背景と課題
+- 既存の業務システムは膨大な量のコードと設計書で構成
+- 人手による分析は時間がかかり、ミスが発生しやすい
+- システムの全体像を把握することが困難
 
-In the project directory, you can run:
+## 解決策
+ブラウザから簡単にコードをアップロードし、自動で分析できるWebアプリケーションを開発
 
-### `npm start`
+### 特徴
+1. 簡単な操作
+   - ブラウザでファイルをドラッグ＆ドロップするだけで分析開始
+   - 分析結果をわかりやすく可視化
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2. 自動分析
+   - プログラムの構造を自動で解析
+   - 機能の関連性を自動で特定
+   - 設計書との紐付けを支援
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+3. 効率化
+   - 分析工数の大幅削減
+   - 人的ミスの防止
+   - 一貫性のある分析結果の提供
 
-### `npm test`
+### 技術的特徴
+- 最新のクラウド技術を活用し、スケーラブルな構成
+- オープンソースの解析ツールを活用し、精度の高い分析を実現
+- 今後のAI統合も視野に入れた拡張性のある設計
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 期待される効果
+1. 業務効率の向上
+   - 分析時間の短縮
+   - 正確性の向上
 
-### `npm run build`
+2. 品質向上
+   - 機能の重複や問題点の早期発見
+   - 設計書との整合性確認の効率化
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. 保守性の向上
+   - システム構造の可視化
+   - ドキュメントとコードの紐付け管理
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 開発状況
+現在、基本機能のプロトタイプを開発中で、まもなく初期バージョンの検証が可能になる予定です。
