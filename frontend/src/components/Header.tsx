@@ -11,7 +11,7 @@ const Header: React.FC = () => {
               SpringBoot Analyzer
             </h1>
             <p className="mt-1 text-sm text-gray-500">
-              Upload your SpringBoot project for analysis
+            分析したいSpringBootプロジェクトをアップロードしてください
             </p>
           </div>
           

@@ -73,7 +73,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onAnalysisComplete }) => {
           </label>
         </div>
         {file && (
-          <div className="text-sm text-gray-600">
+          <div className="text-2xl text-gray-600 text-center">
             Selected file: {file.name}
           </div>
         )}
@@ -85,11 +85,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ onAnalysisComplete }) => {
         <button
           type="submit"
           disabled={loading || !file}
-          className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+          className={`w-full h-15 py-2 px-4 border border-transparent rounded-md shadow-sm text-2xl font-extrabold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
             (loading || !file) && 'opacity-50 cursor-not-allowed'
           }`}
         >
-          {loading ? 'Analyzing...' : 'Analyze Project'}
+          {loading ? '分析中...' : 'プロジェクトを分析する'}
         </button>
       </form>
     </div>

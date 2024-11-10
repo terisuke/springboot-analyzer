@@ -6,11 +6,7 @@ export interface AnalysisResult {
   totalFiles: number;
   totalClasses: number;
   totalMethods: number;
-  classes: Array<{
-    className: string;
-    methodCount: number;
-    lineCount: number;
-  }>;
+  classes: ClassInfo[];
 }
 
 export interface ControllerInfo {
@@ -52,4 +48,12 @@ export interface AnalysisStatus {
   status: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'ERROR';
   progress?: number;
   message?: string;
+}
+
+// クラス情報の型を更新
+export interface ClassInfo {
+  className: string;
+  methodCount: number;
+  lineCount: number;
+  methodNames: string[];
 }

@@ -1,12 +1,40 @@
 // src/components/AnalysisResult.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { AnalysisResult as AnalysisResultType } from '../types';
+import MethodDetailsModal from './MethodDetailsModal';
 
 interface AnalysisResultProps {
-  result: AnalysisResultType
+  result: AnalysisResultType;
 }
 
 const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
+  const [selectedClass, setSelectedClass] = useState<string | null>(null);
+  const [methodAnalysis, setMethodAnalysis] = useState<Record<string, string>>({});
+
+  const handleViewMethods = (className: string) => {
+    setSelectedClass(className);
+  };
+
+  const getMethodNames = (className: string): string[] => {
+    const classInfo = result.classes.find(cls => cls.className === className);
+    return classInfo?.methodNames || [];
+  };
+
+  const handleAnalyzeMethod = async (className: string, methodName: string) => {
+    try {
+      // ここでバックエンドAPIからソースコードを取得する必要があります
+      // const sourceCode = await fetchSourceCode(className, methodName);
+      // const analysis = await analyzeFunctionWithDify(className, methodName, sourceCode);
+      
+      // setMethodAnalysis(prev => ({
+      //   ...prev,
+      //   [methodName]: analysis
+      // }));
+    } catch (error) {
+      console.error('Method analysis failed:', error);
+    }
+  };
+
   // 必要なプロパティの存在チェック
   if (!result || !result.classes) {
     return <div>データが不完全です</div>;
@@ -17,15 +45,15 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
       {/* サマリーセクション */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-blue-50 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold">Total Files</h3>
+          <h3 className="text-lg font-semibold">総ファイル数</h3>
           <p className="text-2xl">{result.totalFiles || 0}</p>
         </div>
         <div className="bg-green-50 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold">Total Classes</h3>
+          <h3 className="text-lg font-semibold">総クラス数</h3>
           <p className="text-2xl">{result.totalClasses || 0}</p>
         </div>
         <div className="bg-purple-50 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold">Total Methods</h3>
+          <h3 className="text-lg font-semibold">総メソッド数</h3>
           <p className="text-2xl">{result.totalMethods || 0}</p>
         </div>
       </div>
@@ -36,16 +64,16 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Class Name
+                クラス名
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Method Count
+                メソッド数
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Lines
+                行数
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Details
+                詳細
               </th>
             </tr>
           </thead>
@@ -63,7 +91,7 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
-                    onClick={() => {/* メソッド一覧表示ロジック */}}
+                    onClick={() => handleViewMethods(cls.className)}
                     className="text-indigo-600 hover:text-indigo-900"
                   >
                     View Methods
@@ -74,6 +102,15 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
           </tbody>
         </table>
       </div>
+      
+      <MethodDetailsModal
+        isOpen={!!selectedClass}
+        onClose={() => setSelectedClass(null)}
+        className={selectedClass || ''}
+        methodNames={selectedClass ? getMethodNames(selectedClass) : []}
+        methodAnalysis={methodAnalysis}
+        onAnalyzeMethod={(methodName) => handleAnalyzeMethod(selectedClass!, methodName)}
+      />
     </div>
   );
 };
