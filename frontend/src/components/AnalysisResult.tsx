@@ -39,7 +39,7 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
                 Class Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Methods
+                Method Count
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Lines
@@ -51,12 +51,12 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
           </thead>
           <tbody className="divide-y divide-gray-200">
             {result.classes.map((cls, index) => (
-              <tr key={`${cls.name}-${index}`} className="hover:bg-gray-50">
+              <tr key={`${cls.className}-${index}`} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {cls.name}
+                  {cls.className}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {cls.methods?.length || 0}
+                  {cls.methodCount || 0}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {cls.lineCount || 0}

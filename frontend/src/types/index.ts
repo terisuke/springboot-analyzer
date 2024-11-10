@@ -7,21 +7,21 @@ export interface AnalysisResult {
   totalClasses: number;
   totalMethods: number;
   classes: Array<{
-    name: string;
-    methods: Array<any>;
+    className: string;
+    methodCount: number;
     lineCount: number;
   }>;
 }
 
 export interface ControllerInfo {
-  name: string;
+  className: string;
   path: string;
   endpoints: EndpointInfo[];
 }
 
 export interface ServiceInfo {
   name: string;
-  methods: MethodInfo[];
+  methodCount: number;
   dependencies: string[];
 }
 
