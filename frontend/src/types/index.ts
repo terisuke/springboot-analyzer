@@ -3,6 +3,14 @@ export interface AnalysisResult {
   controllers: ControllerInfo[];
   services: ServiceInfo[];
   endpoints: EndpointInfo[];
+  totalFiles: number;
+  totalClasses: number;
+  totalMethods: number;
+  classes: Array<{
+    name: string;
+    methods: Array<any>;
+    lineCount: number;
+  }>;
 }
 
 export interface ControllerInfo {
