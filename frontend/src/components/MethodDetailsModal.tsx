@@ -38,7 +38,7 @@ const MethodDetailsModal: React.FC<MethodDetailsModalProps> = ({
                     onClick={() => onAnalyzeMethod(methodName)}
                     className="mt-2 text-indigo-600 hover:text-indigo-900"
                   >
-                    Analyze Method
+                    詳細分析
                   </button>
                 )}
               </div>
