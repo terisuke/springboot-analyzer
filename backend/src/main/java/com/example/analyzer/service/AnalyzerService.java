@@ -10,7 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -42,15 +44,28 @@ public class AnalyzerService {
     }
 
     private void analyzeCompilationUnit(CompilationUnit cu, List<ClassInfo> classes) {
-        cu.findAll(ClassOrInterfaceDeclaration.class).forEach(cls -> {
-            ClassInfo classInfo = new ClassInfo();
-            classInfo.setClassName(cls.getNameAsString());
-            classInfo.setMethodCount(cls.getMethods().size());
-            classInfo.setLineCount(cls.getEnd().get().line - cls.getBegin().get().line);
-            classInfo.setMethodNames(cls.getMethods().stream()
-                    .map(method -> method.getNameAsString())
-                    .toList());
-            classes.add(classInfo);
+    cu.findAll(ClassOrInterfaceDeclaration.class).forEach(cls -> {
+        ClassInfo classInfo = new ClassInfo();
+        classInfo.setClassName(cls.getNameAsString());
+        classInfo.setMethodCount(cls.getMethods().size());
+        classInfo.setLineCount(cls.getEnd().get().line - cls.getBegin().get().line);
+        
+        // メソッド名のリストを設定
+        classInfo.setMethodNames(cls.getMethods().stream()
+                .map(method -> method.getNameAsString())
+                .toList());
+        
+        // メソッドのソースコードを取得
+        Map<String, String> methodSources = new HashMap<>();
+        cls.getMethods().forEach(method -> {
+            methodSources.put(
+                method.getNameAsString(),
+                method.toString()
+            );
+        });
+        classInfo.setMethodSources(methodSources);
+        
+        classes.add(classInfo);
         });
     }
-} 
+}

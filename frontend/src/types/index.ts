@@ -50,10 +50,20 @@ export interface AnalysisStatus {
   message?: string;
 }
 
-// クラス情報の型を更新
 export interface ClassInfo {
   className: string;
   methodCount: number;
   lineCount: number;
   methodNames: string[];
+  methodSources: Record<string, string>;
+}
+
+export interface MethodAnalysis {
+  analysis: string;
+  sourceCode?: string;
+}
+
+export interface DifyApiResponse {
+  answer: string;
+  conversation_id?: string;
 }

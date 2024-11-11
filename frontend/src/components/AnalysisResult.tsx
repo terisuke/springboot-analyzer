@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { AnalysisResult as AnalysisResultType } from '../types';
 import MethodDetailsModal from './MethodDetailsModal';
+import { analyzeFunctionWithDify } from '../services/difyApi';
 
 interface AnalysisResultProps {
   result: AnalysisResultType;
@@ -9,29 +10,37 @@ interface AnalysisResultProps {
 
 const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
   const [selectedClass, setSelectedClass] = useState<string | null>(null);
-  const [methodAnalysis, setMethodAnalysis] = useState<Record<string, string>>({});
+  const [methodAnalysis, setMethodAnalysis] = useState<Record<string, {
+    analysis: string;
+    sourceCode?: string;
+  }>>({});
+  const [loadingMethods, setLoadingMethods] = useState<Record<string, boolean>>({});
 
   const handleViewMethods = (className: string) => {
     setSelectedClass(className);
   };
 
-  const getMethodNames = (className: string): string[] => {
-    const classInfo = result.classes.find(cls => cls.className === className);
-    return classInfo?.methodNames || [];
-  };
-
-  const handleAnalyzeMethod = async (className: string, methodName: string) => {
+  const handleAnalyzeMethod = async (methodName: string) => {
     try {
-      // ここでバックエンドAPIからソースコードを取得する必要があります
-      // const sourceCode = await fetchSourceCode(className, methodName);
-      // const analysis = await analyzeFunctionWithDify(className, methodName, sourceCode);
+      setLoadingMethods(prev => ({ ...prev, [methodName]: true }));
       
-      // setMethodAnalysis(prev => ({
-      //   ...prev,
-      //   [methodName]: analysis
-      // }));
+      // Dify APIを呼び出して分析
+      const analysis = await analyzeFunctionWithDify(
+        selectedClass!,
+        methodName
+      );
+
+      setMethodAnalysis(prev => ({
+        ...prev,
+        [methodName]: {
+          analysis: analysis, // Dify APIからの応答
+          sourceCode: result.classes.find(c => c.className === selectedClass)?.methodSources[methodName]
+        }
+      }));
     } catch (error) {
-      console.error('Method analysis failed:', error);
+      console.error('Analysis failed:', error);
+    } finally {
+      setLoadingMethods(prev => ({ ...prev, [methodName]: false }));
     }
   };
 
@@ -107,9 +116,11 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
         isOpen={!!selectedClass}
         onClose={() => setSelectedClass(null)}
         className={selectedClass || ''}
-        methodNames={selectedClass ? getMethodNames(selectedClass) : []}
+        methodNames={result.classes.find(c => c.className === selectedClass)?.methodNames || []}
         methodAnalysis={methodAnalysis}
-        onAnalyzeMethod={(methodName) => handleAnalyzeMethod(selectedClass!, methodName)}
+        onAnalyzeMethod={handleAnalyzeMethod}
+        isLoading={loadingMethods}
+        classInfo={result.classes.find(c => c.className === selectedClass)}
       />
     </div>
   );
