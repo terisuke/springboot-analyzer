@@ -2,39 +2,61 @@
 import axios from 'axios';
 
 interface DifyResponse {
+  event: string;
+  conversation_id: string;
+  message_id: string;
   answer: string;
-  conversation_id?: string;
-  // 必要に応じて他のレスポンスフィールドを追加
 }
+
+const DIFY_API_URL = process.env.REACT_APP_DIFY_API_URL || '';
+const DIFY_API_KEY = process.env.REACT_APP_DIFY_API_KEY || '';
+
+console.log('API URL:', DIFY_API_URL);
+console.log('API Key exists:', !!DIFY_API_KEY);
 
 export const analyzeFunctionWithDify = async (
   className: string,
-  methodName: string
+  methodName: string,
+  sourceCode: string
 ): Promise<string> => {
-  if (!process.env.REACT_APP_DIFY_API_KEY) {
-    throw new Error('Dify API key is not configured');
-  }
-
   try {
-    const response = await axios.post<DifyResponse>(
-      process.env.REACT_APP_DIFY_API_URL || 'https://api.dify.ai/v1/chat-messages',
+    const response = await axios.post(
+      DIFY_API_URL,
       {
         inputs: {},
-        query: `以下のJavaメソッドの機能を200文字程度で説明してください：\nクラス: ${className}\nメソッド: ${methodName}`,
+        query: `以下のJavaメソッドの機能を解説してください：
+                クラス名: ${className}
+                メソッド名: ${methodName}
+                ソースコード:
+                ${sourceCode}`,
         response_mode: "streaming",
-        user: "user"
+        conversation_id: "",
+        user: "code-analyzer"
       },
       {
         headers: {
-          'Authorization': `Bearer ${process.env.REACT_APP_DIFY_API_KEY}`,
+          'Authorization': `Bearer ${DIFY_API_KEY}`,
           'Content-Type': 'application/json'
         }
       }
     );
 
-    return response.data.answer || '分析結果を取得できませんでした。';
+    // StreamingレスポンスをStringにパースする
+    let fullAnswer = '';
+    const lines = (response.data as string).split('\n');
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        try {
+          const data = JSON.parse(line.slice(6)) as DifyResponse;
+          fullAnswer += data.answer;
+        } catch (e) {
+          console.error('Failed to parse streaming response:', e);
+        }
+      }
+    }
+    return fullAnswer;
   } catch (error) {
     console.error('Dify API Error:', error);
-    throw new Error('予期せぬエラーが発生しました。');
+    throw new Error('分析に失敗しました');
   }
 };

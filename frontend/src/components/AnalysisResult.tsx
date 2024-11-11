@@ -24,21 +24,32 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ result }) => {
     try {
       setLoadingMethods(prev => ({ ...prev, [methodName]: true }));
       
-      // Dify APIを呼び出して分析
+      const classInfo = result.classes.find(c => c.className === selectedClass);
+      if (!classInfo) {
+        throw new Error('クラス情報が見つかりません');
+      }
+
+      const sourceCode = classInfo.methodSources[methodName];
+      if (!sourceCode) {
+        throw new Error('ソースコードが見つかりません');
+      }
+
       const analysis = await analyzeFunctionWithDify(
         selectedClass!,
-        methodName
+        methodName,
+        sourceCode
       );
 
       setMethodAnalysis(prev => ({
         ...prev,
         [methodName]: {
-          analysis: analysis, // Dify APIからの応答
-          sourceCode: result.classes.find(c => c.className === selectedClass)?.methodSources[methodName]
+          analysis,
+          sourceCode
         }
       }));
     } catch (error) {
       console.error('Analysis failed:', error);
+      // エラーメッセージを表示する処理を追加
     } finally {
       setLoadingMethods(prev => ({ ...prev, [methodName]: false }));
     }

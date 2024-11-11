@@ -15,6 +15,7 @@ interface MethodDetailsModalProps {
   onAnalyzeMethod: (methodName: string) => Promise<void>;
   isLoading?: Record<string, boolean>;  // 分析中の状態を管理
   classInfo: ClassInfo | undefined;
+  error?: Record<string, string>;
 }
 
 const MethodDetailsModal: React.FC<MethodDetailsModalProps> = ({
@@ -25,7 +26,8 @@ const MethodDetailsModal: React.FC<MethodDetailsModalProps> = ({
   methodAnalysis,
   onAnalyzeMethod,
   isLoading = {},
-  classInfo
+  classInfo,
+  error = {}
 }) => {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
@@ -40,10 +42,13 @@ const MethodDetailsModal: React.FC<MethodDetailsModalProps> = ({
               <div key={methodName} className="border rounded p-4">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <h3 className="font-medium">{methodName}</h3>
+                    <h3 className="font-medium text-center font-bold">{methodName}</h3>
                     <pre className="mt-2 p-2 bg-gray-50 rounded text-sm overflow-x-auto whitespace-pre-wrap">
                       {classInfo?.methodSources[methodName] || 'ソースコードがありません'}
                     </pre>
+                    {error[methodName] && (
+                      <p className="text-red-500 text-sm mt-2">{error[methodName]}</p>
+                    )}
                     {!methodAnalysis[methodName] && (
                       <button
                         onClick={() => onAnalyzeMethod(methodName)}
@@ -56,11 +61,13 @@ const MethodDetailsModal: React.FC<MethodDetailsModalProps> = ({
                   </div>
                   {methodAnalysis[methodName] && (
                     <div className="flex-1 ml-4">
-                      <textarea
-                        className="w-full h-24 p-2 border rounded whitespace-pre-wrap"
-                        value={methodAnalysis[methodName].analysis}
-                        readOnly
-                      />
+                      <h3 className="text-center font-bold">分析結果</h3>
+                      <pre
+                        className="mt-2 p-2 bg-gray-50 rounded text-sm overflow-x-auto whitespace-pre-wrap"
+                        style={{ fontFamily: 'monospace' }}
+                      >
+                        {methodAnalysis[methodName].analysis}
+                      </pre>
                     </div>
                   )}
                 </div>
