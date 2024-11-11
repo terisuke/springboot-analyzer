@@ -42,7 +42,7 @@ const MethodDetailsModal: React.FC<MethodDetailsModalProps> = ({
               <div key={methodName} className="border rounded p-4">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <h3 className="font-medium text-center font-bold">{methodName}</h3>
+                    <h3 className="text-center font-bold">{methodName}</h3>
                     <pre className="mt-2 p-2 bg-gray-50 rounded text-sm overflow-x-auto whitespace-pre-wrap">
                       {classInfo?.methodSources[methodName] || 'ソースコードがありません'}
                     </pre>
